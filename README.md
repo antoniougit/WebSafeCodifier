@@ -48,7 +48,7 @@ v1.1 - 27/02/2020 - Original version, optimised by me
 v1.0 - Original version, not created by me
 
 
-##Helpful references
+## References
 
 https://lonewolfonline.net/html-character-codes-ascii-entity-unicode-symbols/  
 http://xmlnews.org/docs/xml-basics.html  
