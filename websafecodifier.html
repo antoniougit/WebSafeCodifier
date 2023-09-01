@@ -11,17 +11,50 @@
 	<title>HTML Character Map</title>
 
 	<style>
-		#fromText,
-		#toText {
-			width: 750px;
-			height: 200px;
+		.container,
+		#options {
+			display: -webkit-box;
+			display: -ms-flexbox;
+			display: flex;
+			-webkit-box-orient: vertical;
+			-webkit-box-direction: normal;
+			-ms-flex-direction: column;
+			flex-direction: column;
+			-webkit-box-align: center;
+			-ms-flex-align: center;
+			align-items: center;
+			-webkit-box-pack: center;
+			-ms-flex-pack: center;
+			justify-content: center;
+		}
+
+		#content {
+			max-width: 750px;
+		}
+
+		#options {
+			margin-top: 10px;
+		}
+
+		h2 {
+			display: inline-block;
+		}
+
+		textarea {
+			display: block;
+			min-height: 100px;
+			width: 100%;
+		}
+
+		#input,
+		#output {
 			overflow: auto;
 			border: 1px solid #c4c4c4;
 			background-color: #f4f4f4;
 		}
 
-		#fromCount,
-		#toCount {
+		#inputCounter,
+		#outputCounter {
 			font-size: 20px;
 			resize: none;
 			height: 30px;
@@ -29,74 +62,131 @@
 			background-color: #ffffff;
 			margin-left: 10px;
 		}
+
+		input,
+		input[type="submit"],
+		input:focus {
+			border: none;
+			background-image: none;
+			background-color: transparent;
+			-webkit-box-shadow: none;
+			box-shadow: none;
+			outline: none;
+		}
+
+		#submit {
+			color: #ffffff;
+			font-family: Arial;
+			font-size: 15px;
+			font-weight: bold;
+			display: inline-block;
+			cursor: pointer;
+			text-decoration: none;
+			text-shadow: 0px 1px 0px #810e05;
+		}
+
+		#submitButton {
+			margin-top: 10px;
+			-webkit-box-shadow: inset 0px 1px 0px 0px #f5978e;
+			box-shadow: inset 0px 1px 0px 0px #f5978e;
+			background: -o-linear-gradient(top, #f24537 5%, #c62d1f 100%);
+			background: -webkit-gradient(linear, left top, left bottom, color-stop(5%, #f24537), to(#c62d1f));
+			background: linear-gradient(to bottom, #f24537 5%, #c62d1f 100%);
+			filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f24537', endColorstr='#c62d1f', GradientType=0);
+			background-color: #f24537;
+			border-radius: 6px;
+			border: 1px solid #d02718;
+			display: inline-block;
+			cursor: pointer;
+			padding: 6px 24px;
+		}
+
+		#submitButton:hover {
+			background: -o-linear-gradient(top, #c62d1f 5%, #f24537 100%);
+			background: -webkit-gradient(linear, left top, left bottom, color-stop(5%, #c62d1f), to(#f24537));
+			background: linear-gradient(to bottom, #c62d1f 5%, #f24537 100%);
+			filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#c62d1f', endColorstr='#f24537', GradientType=0);
+			background-color: #c62d1f;
+		}
+
+		#submitButton:active {
+			position: relative;
+			top: 1px;
+		}
+
+		.persadoLogo {
+			margin-top: 50px;
+			width: 200px;
+		}
 	</style>
 
 	<script type="text/javascript">
-		function escapex() {
-			let from = document.getElementById('fromText');
-			let to = document.getElementById('toText');
-			const preescape = '' + from.value;
-			let escaped = '';
-			let i = 0;
-			const brEscape = document.getElementById('br').checked;
-			const nbsp = document.getElementById('nbsp').checked;
-			const tagEscape = document.getElementById('tag').checked;
-			const others = document.getElementById('other').checked;
-			//re = new RegExp("/&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-f]{1,6});/ig"); // all html entities
+		function encodeText() {
+			const input = document.getElementById('input'),
+				output = document.getElementById('output'),
+				checkBr = document.getElementById('br').checked,
+				checkNbsp = document.getElementById('nbsp').checked,
+				checkTag = document.getElementById('tag').checked,
+				checkRest = document.getElementById('rest').checked,
+				preEncode = input.value;
+			let encoded = '',
+				i = 0;
 
-			for (i = 0; i < preescape.length; i++) {
-				let p = preescape.charAt(i);
-				const p5 = preescape.charAt(i + 5);
-				const p6 = preescape.charAt(i + 6);
-				const p7 = preescape.charAt(i + 7);
-				if (others) {
-					if (p === '&' && (p5 === ';' || p6 === ';' || p7 === ';')) {
+			for (i = 0; i < preEncode.length; i++) {
+				let p = preEncode.charAt(i),
+					p2 = preEncode.charAt(i + 1),
+					p3 = preEncode.charAt(i + 2),
+					p4 = preEncode.charAt(i + 3),
+					p5 = preEncode.charAt(i + 4),
+					p6 = preEncode.charAt(i + 5);
+				if (checkRest) {
+					if (p + p2 + p3 + p4 + p5 + p6 === '&nbsp;') {
 						p = '&';
 					} else {
-						p = '' + escapeCharx(p);
+						p = encodeChar(p);
 					}
 				}
-				if (tagEscape) {
-					p = '' + escapeTags(p);
+				if (checkTag) {
+					p = encodeTags(p);
 				}
-				if (nbsp) {
-					p = '' + escapeNBSP(p);
+				if (checkNbsp) {
+					p = encodeNbsp(p);
 				}
-				if (brEscape) {
-					p = '' + escapeBR(p);
+				if (checkBr) {
+					p = encodeBr(p);
 				}
-				escaped = escaped + p;
+				encoded += p;
 			}
-			to.value = escaped;
-			document.getElementById('fromCount').value = from.value.length + ' chars';
-			document.getElementById('toCount').value = to.value.length + ' chars';
+			output.value = encoded;
+			document.getElementById('inputCounter').textContent = input.value.length + ' chars';
+			document.getElementById('outputCounter').textContent = output.value.length + ' chars';
 		}
 
-		function escapeBR(original) {
-			const thechar = original.charCodeAt(0);
-			switch (thechar) {
+		function encodeBr(char) {
+			const charCode = char.charCodeAt(0);
+			switch (charCode) {
 				case 10:
-					return '<br>';
+					return '<br />';
 					break; // newline
 				case '\r':
 					break;
 			}
-			return original;
+			return char;
 		}
 
-		function escapeNBSP(original) {
-			const thechar = original.charCodeAt(0);
-			switch (thechar) {
+		function encodeNbsp(char) {
+			const charCode = char.charCodeAt(0);
+			switch (charCode) {
 				case 32:
 					return '&nbsp;';
 					break; // space
 			}
-			return original;
+			return char;
 		}
 
-		function escapeTags(original) {
-			const thechar = original.charCodeAt(0);
-			switch (thechar) {
+		function encodeTags(char) {
+			const charCode = char.charCodeAt(0);
+			switch (charCode) {
 				case 34:
 					return '&quot;';
 					break; // '
@@ -107,19 +197,20 @@
 					return '&gt;';
 					break; // >
 			}
-			return original;
+			return char;
 		}
 
-		function escapeCharx(original) {
+		function encodeChar(char) {
 			let found = true;
-			const thechar = original.charCodeAt(0);
-			switch (thechar) {
+			const charCode = char.charCodeAt(0);
+			// re = new RegExp("/&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-f]{1,6});/ig"); // all html entities
+			switch (charCode) {
 				case 38:
 					return '&amp;';
 					break; // &
-					// case 39:
-					//  return '&apos;'; 
-					//  break;
+				case 39:
+					return '&#39;';
+					break;
 				case 162:
 					return '&cent;';
 					break;
@@ -315,11 +406,11 @@
 			}
 
 			if (!found) {
-				if (thechar > 127) {
-					return '&#x' + (thechar.toString(16).length < 4 ? '0' + thechar.toString(16) : thechar.toString(16)) +
+				if (charCode > 127) {
+					return '&#x' + (charCode.toString(16).length < 4 ? '0' + charCode.toString(16) : charCode.toString(16)) +
 						';';
 				} else {
-					return original;
+					return char;
 				}
 			}
 		}
@@ -328,44 +419,50 @@
 
 <body>
 	<div id="container" class="container">
-		<a class="brand" href="#">Codifier</a>
-		<div id="content">
-			<div class="box">
-				<div class="wrapper">
-					<div class="content">
-						<h1>HTML Escape Tool &#x2192; &gt; &#x2209;</h1>
-						<p>Escape all the special characters, which can create problems on a webpage.</p>
-						<p>The HTML Escape tool escapes all special HTML characters, and replaces them with the correct
-							entities.</p>
-						<p>The escaped result will work with almost any encoding, and is also useful for putting source
-							code on a web page.</p>
-
-						<h2>Enter/paste text to HTML Escape:</h2>
-						<textarea onkeyup="escapex();" id="fromText" name="fromText"></textarea>
-						<textarea id="fromCount" name="fromCount"># of chars</textarea>
-						<p>
-							<input onclick="escapex();" type="checkbox" id="br">
-							<label for="br">Replace newline with &lt;br&gt;</label><br>
-							<input onclick="escapex();" type="checkbox" id="nbsp">
-							<label for="nbsp">Replace space with &amp;nbsp;</label><br>
-							<input onclick="escapex();" type="checkbox" id="tag" checked="checked">
-							<label for="tag">Replace &lt; &gt; &quot;</label><br>
-							<input onclick="escapex();" type="checkbox" id="other" checked="checked">
-							<label for="other">Escape special characters</label><br>
-						</p>
-						<h2>HTML Escaped result:</h2>
-						<textarea id="toText" name="toText"></textarea>
-						<textarea id="toCount" name="toCount"># of chars</textarea>
+		<header>
+			<a class="brand" href="#"><img src="./images/logo.jpg" alt=""></a>
+		</header>
+		<main>
+			<div class="content" id="content">
+				<h1>HTML Entity Encoder &#x276F; &#8364; &#169;</h1>
+				<p>Encode unsafe and non-ASCII characters that can create problems on a webpage or email.</p>
+				<p>The HTML Entity Encoder replaces unsafe characters (based on options) with HTML entities.</p>
+				<h2>Original text:</h2><span id="inputCounter" name="inputCounter"># of chars</span>
+				<textarea id="input" name="input"></textarea>
+				<div id="options">
+					<div class="checks">
+						<input type="checkbox" id="rest" checked="checked">
+						<label for="rest">Encode non-ASCII chars</label>
+					</div>
+					<div class="checks">
+						<input type="checkbox" id="tag" checked="checked">
+						<label for="tag">Encode &lt; &gt; and &quot;</label>
+					</div>
+					<div class="checks">
+						<input type="checkbox" id="nbsp">
+						<label for="nbsp">Replace spaces with &amp;nbsp;</label>
+					</div>
+					<div class="checks">
+						<input type="checkbox" id="br">
+						<label for="br">Replace newlines with &lt;br /&gt;</label>
+					</div>
+					<div class="checks" id="submitButton">
+						<input onclick="encodeText();" type="submit" id="submit" value="Encode">
 					</div>
 				</div>
+				<h2>Encoded output:</h2><span id="outputCounter" name="outputCounter"># of chars</span>
+				<textarea id="output" name="output"></textarea>
 			</div>
-		</div>
+		</main>
+		<footer>
+			<div class="container">
+				<a href="http://www.persado.com"><img
+						src="https://www.persado.com/system/assets/uploads/2019/01/persado-logo-tagline.svg"
+						class="persadoLogo" alt=""></a>
+				<p>&copy; 2020</p>
+			</div>
+		</footer>
 	</div>
-	<footer>
-		<div class="container">
-			<p><a href="http://www.persado.com">Persado</a> &copy; 2013</p>
-		</div>
-	</footer>
 </body>
 
 </html>
