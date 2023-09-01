@@ -1,5 +1,8 @@
 # WebSafeCodifier
 
+First revision: 27/02/2020
+
+## Revisions
 v6.0
 * Major overhaul: modern UI, removed buttons, character count and encoding/decoding now happens automatically on typing/copypasting instead of having to press a button.
 
@@ -21,15 +24,11 @@ v3.0 - 31/03/2021
 * Slightly increased default textarea height. 
 * Minified CSS to decrease file size.
 
---------------
-
 v2.1 - 01/08/2020
 * Fixed a bug where the "Encode" button didn't always register the click. 
 * "Enter" keyboard button now encodes the input text. "Shift + Enter" must be used for manual line breaks, if needed. 
 * Added "Clear" button. 
 * Added favicon.
-
---------------
 
 v2.0 - 24/07/2020
 * Complete overhaul, removed everything and started from scratch. Code reduced to about 30% of original, a completely different approach was used for conversion. 
@@ -39,8 +38,6 @@ v2.0 - 24/07/2020
 * Options updated to be more useful and reflect this approach. 
 * Last option (noted in red) overrides all other options and encodes pretty much everything except latin letters, numbers and the most common characters.
 
---------------
-
 v1.1 - 27/02/2020 - Original version, optimised by me
 * Removed jQuery, CSS dependencies and other redundant stuff. 
 * Converted everything to ES6+. 
@@ -48,14 +45,11 @@ v1.1 - 27/02/2020 - Original version, optimised by me
 * Improved code, some functions & logic.
 * &nbsp; and most HTML entities are now NOT being converted, but "&" still is.
 
---------------
-
 v1.0 - Original version, not created by me
 
---------------
 
+##Helpful references
 
-Helpful references: 
 https://lonewolfonline.net/html-character-codes-ascii-entity-unicode-symbols/
 http://xmlnews.org/docs/xml-basics.html
 https://mothereff.in/html-entities
