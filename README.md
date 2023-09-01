@@ -43,13 +43,13 @@ v1.1 - 27/02/2020 - Original version, optimised by me
 * Converted everything to ES6+. 
 * Better variable naming.
 * Improved code, some functions & logic.
-* &nbsp; and most HTML entities are now NOT being converted, but "&" still is.
+* &amp;nbsp; and most HTML entities are now NOT being converted, but "&" still is.
 
 v1.0 - Original version, not created by me
 
 
 ##Helpful references
 
-https://lonewolfonline.net/html-character-codes-ascii-entity-unicode-symbols/
-http://xmlnews.org/docs/xml-basics.html
+https://lonewolfonline.net/html-character-codes-ascii-entity-unicode-symbols/  
+http://xmlnews.org/docs/xml-basics.html  
 https://mothereff.in/html-entities
