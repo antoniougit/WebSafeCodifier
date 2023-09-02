@@ -2,467 +2,170 @@
 <html lang="en">
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description"
-		content="Escape special characters in a text to correct HTML entities with our tool. The tool is a quick paste/copy solution, which handles all special characters and characters above unicode value 127.">
-	</meta>
-	<meta name="robots" content="noindex,nofollow">
-	<title>HTML Character Map</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Encode unsafe and non-ASCII characters that can create problems on a webpage or email. The HTML Entity Encoder replaces unsafe characters - based on options - with HTML entities.">
+    </meta>
+    <meta name="robots" content="noindex,nofollow">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <title>Codifier</title>
 
-	<style>
-		.container,
-		#options {
-			display: -webkit-box;
-			display: -ms-flexbox;
-			display: flex;
-			-webkit-box-orient: vertical;
-			-webkit-box-direction: normal;
-			-ms-flex-direction: column;
-			flex-direction: column;
-			-webkit-box-align: center;
-			-ms-flex-align: center;
-			align-items: center;
-			-webkit-box-pack: center;
-			-ms-flex-pack: center;
-			justify-content: center;
-		}
+    <style>
+        #options,.container{font-size:18px;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center}#content{max-width:750px}#all+label{color:red}#options{margin-top:20px;user-select:none;-moz-user-select:none;-khtml-user-select:none;-webkit-user-select:none;-o-user-select:none}h3{display:inline-block}textarea{display:block;height:100px;width:100%}#input,#output{overflow:auto;border:1px solid #c4c4c4;background-color:#f4f4f4}#inputCounter,#outputCounter{font-size:20px;resize:none;height:30px;border:none;background-color:#fff;margin-left:10px}button,button:focus,button[type=submit]{border:none;background-image:none;background-color:transparent;-webkit-box-shadow:none;box-shadow:none;outline:0}#outputBox{margin-top:30px}#clearButton,#encodeButton{width:120px;height:40px;color:#fff;font-family:Arial;font-size:15px;font-weight:700;display:inline-block;text-decoration:none;text-shadow:0 1px 0 #810e05;margin-top:20px;-webkit-box-shadow:inset 0 1px 0 0 #f5978e;box-shadow:inset 0 1px 0 0 #f5978e;background:-o-linear-gradient(top,#f24537 5%,#c62d1f 100%);background:-webkit-gradient(linear,left top,left bottom,color-stop(5%,#f24537),to(#c62d1f));background:linear-gradient(to bottom,#f24537 5%,#c62d1f 100%);background-color:#f24537;border-radius:6px;border:1px solid #d02718;cursor:pointer;padding:6px 24px}#clearButton:hover,#encodeButton:hover{background:-o-linear-gradient(top,#c62d1f 5%,#f24537 100%);background:-webkit-gradient(linear,left top,left bottom,color-stop(5%,#c62d1f),to(#f24537));background:linear-gradient(to bottom,#c62d1f 5%,#f24537 100%);background-color:#c62d1f}#clearButton:active,#encodeButton:active{top:1px}#clearButton{margin-top:10px;height:30px;text-shadow:0 1px 0 #009688;-webkit-box-shadow:inset 0 1px 0 0 #acdc39;box-shadow:inset 0 1px 0 0 #acdc39;background:-o-linear-gradient(top,#4caf50 5%,#8bc34a 100%);background:-webkit-gradient(linear,left top,left bottom,color-stop(5%,#4caf50),to(#8bc34a));background:linear-gradient(to bottom,#4caf50 5%,#8bc34a 100%) filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#4CAF50', endColorstr='#8BC34A', GradientType=0);background-color:#4caf50;border:1px solid #009688}#clearButton:hover{background:-o-linear-gradient(top,#8bc34a 5%,#4caf50 100%);background:-webkit-gradient(linear,left top,left bottom,color-stop(5%,#8bc34a),to(#4caf50));background:linear-gradient(to bottom,#8bc34a 5%,#4caf50 100%);background-color:#8bc34a}.persadoLogo{margin-top:50px;width:200px}
+    </style>
 
-		#content {
-			max-width: 750px;
-		}
+    <script>
+        const overrides = {
+            0x00: '\uFFFD',
+            0x80: '\u20AC',
+            0x82: '\u201A',
+            0x83: '\u0192',
+            0x84: '\u201E',
+            0x85: '\u2026',
+            0x86: '\u2020',
+            0x87: '\u2021',
+            0x88: '\u02C6',
+            0x89: '\u2030',
+            0x8A: '\u0160',
+            0x8B: '\u2039',
+            0x8C: '\u0152',
+            0x8E: '\u017D',
+            0x91: '\u2018',
+            0x92: '\u2019',
+            0x93: '\u201C',
+            0x94: '\u201D',
+            0x95: '\u2022',
+            0x96: '\u2013',
+            0x97: '\u2014',
+            0x98: '\u02DC',
+            0x99: '\u2122',
+            0x9A: '\u0161',
+            0x9B: '\u203A',
+            0x9C: '\u0153',
+            0x9E: '\u017E',
+            0x9F: '\u0178'
+        };
 
-		#options {
-			margin-top: 10px;
-		}
+        function encodeText() {
+            const input = document.getElementById('input'),
+                output = document.getElementById('output'),
+                checkTag = document.getElementById('tag').checked,
+                checkNbsp = document.getElementById('nbsp').checked,
+                checkBr = document.getElementById('br').checked,
+                checkAll = document.getElementById('all').checked,
+                preEncode = input.value,
+                encoded = preEncode.replace(/([\u0000-\uD799]|[\uD800-\uDBFF][\uDC00-\uFFFF])/g, function(c) {
+                    let c1 = c.charCodeAt(0);
+                    if (!checkAll) {
+                        if (c1 === 0x20)
+                            return (checkNbsp) ? '&nbsp;' : c;
+                        if (c1 === 0x0A)
+                            return (checkBr) ? '<br />' : c;
+                        if (!checkTag) {
+                            switch (c1) {
+                                case 0x3C:
+                                    return '<';
+                                    break;
+                                case 0x3E:
+                                    return '>';
+                                    break;
+                                case 0x22:
+                                    return '"';
+                                    break;
+                            }
+                        }
+                    }
+                    if (c1 === 0x21 || c1 === 0x2C || c1 === 0x3F)
+                        return c;
+                    if (c1 <= 0xFF)
+                        return (c1 === overrides[c1]) ? c1 : escape(c).replace(/%(..)/g, '&#x$1;');
+                    else if (c.length === 1)
+                        return '&#' + c1 + ';';
+                    else if (c.length === 2 && c1 >= 0xD800 && c1 <= 0xDBFF)
+                        return '&#' + ((c1 - 0xD800) * 0x400 + c.charCodeAt(1) - 0xDC00 + 0x10000) + ';'
+                    else return '';
+                });
+            output.value = encoded;
+            document.getElementById('inputCounter').textContent = input.value.length + ' chars';
+            document.getElementById('outputCounter').textContent = output.value.length + ' chars';
+        }
 
-		h2 {
-			display: inline-block;
-		}
+        function encodeOnEnter(e) {
+            const key = e.which && e.which || e.keyCode;
 
-		textarea {
-			display: block;
-			min-height: 100px;
-			width: 100%;
-		}
+            if (key === 13 && !e.shiftKey) {
+                e.preventDefault();
+                encodeText();
+            }
+        }
 
-		#input,
-		#output {
-			overflow: auto;
-			border: 1px solid #c4c4c4;
-			background-color: #f4f4f4;
-		}
-
-		#inputCounter,
-		#outputCounter {
-			font-size: 20px;
-			resize: none;
-			height: 30px;
-			border: none;
-			background-color: #ffffff;
-			margin-left: 10px;
-		}
-
-		input,
-		input[type="submit"],
-		input:focus {
-			border: none;
-			background-image: none;
-			background-color: transparent;
-			-webkit-box-shadow: none;
-			box-shadow: none;
-			outline: none;
-		}
-
-		#submit {
-			color: #ffffff;
-			font-family: Arial;
-			font-size: 15px;
-			font-weight: bold;
-			display: inline-block;
-			cursor: pointer;
-			text-decoration: none;
-			text-shadow: 0px 1px 0px #810e05;
-		}
-
-		#submitButton {
-			margin-top: 10px;
-			-webkit-box-shadow: inset 0px 1px 0px 0px #f5978e;
-			box-shadow: inset 0px 1px 0px 0px #f5978e;
-			background: -o-linear-gradient(top, #f24537 5%, #c62d1f 100%);
-			background: -webkit-gradient(linear, left top, left bottom, color-stop(5%, #f24537), to(#c62d1f));
-			background: linear-gradient(to bottom, #f24537 5%, #c62d1f 100%);
-			filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f24537', endColorstr='#c62d1f', GradientType=0);
-			background-color: #f24537;
-			border-radius: 6px;
-			border: 1px solid #d02718;
-			display: inline-block;
-			cursor: pointer;
-			padding: 6px 24px;
-		}
-
-		#submitButton:hover {
-			background: -o-linear-gradient(top, #c62d1f 5%, #f24537 100%);
-			background: -webkit-gradient(linear, left top, left bottom, color-stop(5%, #c62d1f), to(#f24537));
-			background: linear-gradient(to bottom, #c62d1f 5%, #f24537 100%);
-			filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#c62d1f', endColorstr='#f24537', GradientType=0);
-			background-color: #c62d1f;
-		}
-
-		#submitButton:active {
-			position: relative;
-			top: 1px;
-		}
-
-		.persadoLogo {
-			margin-top: 50px;
-			width: 200px;
-		}
-	</style>
-
-	<script type="text/javascript">
-		function encodeText() {
-			const input = document.getElementById('input'),
-				output = document.getElementById('output'),
-				checkBr = document.getElementById('br').checked,
-				checkNbsp = document.getElementById('nbsp').checked,
-				checkTag = document.getElementById('tag').checked,
-				checkRest = document.getElementById('rest').checked,
-				preEncode = input.value;
-			let encoded = '',
-				i = 0;
-
-			for (i = 0; i < preEncode.length; i++) {
-				let p = preEncode.charAt(i),
-					p2 = preEncode.charAt(i + 1),
-					p3 = preEncode.charAt(i + 2),
-					p4 = preEncode.charAt(i + 3),
-					p5 = preEncode.charAt(i + 4),
-					p6 = preEncode.charAt(i + 5);
-				if (checkRest) {
-					if (p + p2 + p3 + p4 + p5 + p6 === '&nbsp;') {
-						p = '&';
-					} else {
-						p = encodeChar(p);
-					}
-				}
-				if (checkTag) {
-					p = encodeTags(p);
-				}
-				if (checkNbsp) {
-					p = encodeNbsp(p);
-				}
-				if (checkBr) {
-					p = encodeBr(p);
-				}
-				encoded += p;
-			}
-			output.value = encoded;
-			document.getElementById('inputCounter').textContent = input.value.length + ' chars';
-			document.getElementById('outputCounter').textContent = output.value.length + ' chars';
-		}
-
-		function encodeBr(char) {
-			const charCode = char.charCodeAt(0);
-			switch (charCode) {
-				case 10:
-					return '<br />';
-					break; // newline
-				case '\r':
-					break;
-			}
-			return char;
-		}
-
-		function encodeNbsp(char) {
-			const charCode = char.charCodeAt(0);
-			switch (charCode) {
-				case 32:
-					return '&nbsp;';
-					break; // space
-			}
-			return char;
-		}
-
-		function encodeTags(char) {
-			const charCode = char.charCodeAt(0);
-			switch (charCode) {
-				case 34:
-					return '&quot;';
-					break; // '
-				case 60:
-					return '&lt;';
-					break; // <
-				case 62:
-					return '&gt;';
-					break; // >
-			}
-			return char;
-		}
-
-		function encodeChar(char) {
-			let found = true;
-			const charCode = char.charCodeAt(0);
-			// re = new RegExp("/&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-f]{1,6});/ig"); // all html entities
-			switch (charCode) {
-				case 38:
-					return '&amp;';
-					break; // &
-				case 39:
-					return '&#39;';
-					break;
-				case 162:
-					return '&cent;';
-					break;
-				case 198:
-					return '&AElig;';
-					break;
-				case 193:
-					return '&Aacute;';
-					break;
-				case 194:
-					return '&Acirc;';
-					break;
-				case 192:
-					return '&Agrave;';
-					break;
-				case 197:
-					return '&Aring;';
-					break;
-				case 195:
-					return '&Atilde;';
-					break;
-				case 196:
-					return '&Auml;';
-					break;
-				case 199:
-					return '&Ccedil;';
-					break;
-				case 208:
-					return '&ETH;';
-					break;
-				case 201:
-					return '&Eacute;';
-					break;
-				case 202:
-					return '&Ecirc;';
-					break;
-				case 200:
-					return '&Egrave;';
-					break;
-				case 203:
-					return '&Euml;';
-					break;
-				case 205:
-					return '&Iacute;';
-					break;
-				case 206:
-					return '&Icirc;';
-					break;
-				case 204:
-					return '&Igrave;';
-					break;
-				case 207:
-					return '&Iuml;';
-					break;
-				case 209:
-					return '&Ntilde;';
-					break;
-				case 211:
-					return '&Oacute;';
-					break;
-				case 212:
-					return '&Ocirc;';
-					break;
-				case 210:
-					return '&Ograve;';
-					break;
-				case 216:
-					return '&Oslash;';
-					break;
-				case 213:
-					return '&Otilde;';
-					break;
-				case 214:
-					return '&Ouml;';
-					break;
-				case 222:
-					return '&THORN;';
-					break;
-				case 218:
-					return '&Uacute;';
-					break;
-				case 219:
-					return '&Ucirc;';
-					break;
-				case 217:
-					return '&Ugrave;';
-					break;
-				case 220:
-					return '&Uuml;';
-					break;
-				case 221:
-					return '&Yacute;';
-					break;
-				case 225:
-					return '&aacute;';
-					break;
-				case 226:
-					return '&acirc;';
-					break;
-				case 230:
-					return '&aelig;';
-					break;
-				case 224:
-					return '&agrave;';
-					break;
-				case 229:
-					return '&aring;';
-					break;
-				case 227:
-					return '&atilde;';
-					break;
-				case 228:
-					return '&auml;';
-					break;
-				case 231:
-					return '&ccedil;';
-					break;
-				case 233:
-					return '&eacute;';
-					break;
-				case 234:
-					return '&ecirc;';
-					break;
-				case 232:
-					return '&egrave;';
-					break;
-				case 240:
-					return '&eth;';
-					break;
-				case 235:
-					return '&euml;';
-					break;
-				case 237:
-					return '&iacute;';
-					break;
-				case 238:
-					return '&icirc;';
-					break;
-				case 236:
-					return '&igrave;';
-					break;
-				case 239:
-					return '&iuml;';
-					break;
-				case 241:
-					return '&ntilde;';
-					break;
-				case 243:
-					return '&oacute;';
-					break;
-				case 244:
-					return '&ocirc;';
-					break;
-				case 242:
-					return '&ograve;';
-					break;
-				case 248:
-					return '&oslash;';
-					break;
-				case 245:
-					return '&otilde;';
-					break;
-				case 246:
-					return '&ouml;';
-					break;
-				case 223:
-					return '&szlig;';
-					break;
-				case 254:
-					return '&thorn;';
-					break;
-				case 250:
-					return '&uacute;';
-					break;
-				case 251:
-					return '&ucirc;';
-					break;
-				case 249:
-					return '&ugrave;';
-					break;
-				case 252:
-					return '&uuml;';
-					break;
-				case 253:
-					return '&yacute;';
-					break;
-				case 255:
-					return '&yuml;';
-					break;
-				default:
-					found = false;
-					break;
-			}
-
-			if (!found) {
-				if (charCode > 127) {
-					return '&#x' + (charCode.toString(16).length < 4 ? '0' + charCode.toString(16) : charCode.toString(16)) +
-						';';
-				} else {
-					return char;
-				}
-			}
-		}
-	</script>
+        function clearTexts() {
+            document.getElementById('input').value = '';
+            document.getElementById('output').value = '';
+            document.getElementById('inputCounter').textContent = '0 chars';
+            document.getElementById('outputCounter').textContent = '0 chars';
+        }
+        // re = new RegExp("/&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-f]{1,6});/ig"); // all html entities, plans for future update
+    </script>
 </head>
 
 <body>
-	<div id="container" class="container">
-		<header>
-			<a class="brand" href="#"><img src="./images/logo.jpg" alt=""></a>
-		</header>
-		<main>
-			<div class="content" id="content">
-				<h1>HTML Entity Encoder &#x276F; &#8364; &#169;</h1>
-				<p>Encode unsafe and non-ASCII characters that can create problems on a webpage or email.</p>
-				<p>The HTML Entity Encoder replaces unsafe characters (based on options) with HTML entities.</p>
-				<h2>Original text:</h2><span id="inputCounter" name="inputCounter"># of chars</span>
-				<textarea id="input" name="input"></textarea>
-				<div id="options">
-					<div class="checks">
-						<input type="checkbox" id="rest" checked="checked">
-						<label for="rest">Encode non-ASCII chars</label>
-					</div>
-					<div class="checks">
-						<input type="checkbox" id="tag" checked="checked">
-						<label for="tag">Encode &lt; &gt; and &quot;</label>
-					</div>
-					<div class="checks">
-						<input type="checkbox" id="nbsp">
-						<label for="nbsp">Replace spaces with &amp;nbsp;</label>
-					</div>
-					<div class="checks">
-						<input type="checkbox" id="br">
-						<label for="br">Replace newlines with &lt;br /&gt;</label>
-					</div>
-					<div class="checks" id="submitButton">
-						<input onclick="encodeText();" type="submit" id="submit" value="Encode">
-					</div>
-				</div>
-				<h2>Encoded output:</h2><span id="outputCounter" name="outputCounter"># of chars</span>
-				<textarea id="output" name="output"></textarea>
-			</div>
-		</main>
-		<footer>
-			<div class="container">
-				<a href="http://www.persado.com"><img
-						src="https://www.persado.com/system/assets/uploads/2019/01/persado-logo-tagline.svg"
-						class="persadoLogo" alt=""></a>
-				<p>&copy; 2020</p>
-			</div>
-		</footer>
-	</div>
+    <div id="container" class="container">
+        <header>
+            <a class="brand" href="#"><img src="./images/logo.jpg" alt="Codifier logo"></a>
+        </header>
+        <main>
+            <div class="content" id="content">
+                <p>Encode unsafe and non-ASCII characters that can create problems on a webpage or email. The Codifer
+                    replaces unsafe characters - based on options - with HTML entities.</p>
+                <div id="inputBox">
+                    <h3>Original text:</h3>
+                    <span id="inputCounter" name="inputCounter">0 chars</span>
+                    <textarea id="input" name="input"></textarea>
+                </div>
+                <div id="options">
+                    <div class="checks">
+                        <input type="checkbox" id="tag">
+                        <label for="tag">Encode &lt; &gt; and &quot;</label>
+                    </div>
+                    <div class="checks">
+                        <input type="checkbox" id="nbsp">
+                        <label for="nbsp">Replace spaces with &amp;nbsp;</label>
+                    </div>
+                    <div class="checks">
+                        <input type="checkbox" id="br">
+                        <label for="br">Replace newlines with &lt;br /&gt;</label>
+                    </div>
+                    <div class="checks">
+                        <input type="checkbox" id="all">
+                        <label for="all">Encode ALL unsafe chars (overrides other options)</label>
+                    </div>
+                    <button type="submit" id="encodeButton">Encode</button>
+                    <button type="submit" id="clearButton">Clear</button>
+                </div>
+                <div id="outputBox">
+                    <h3>Encoded output:</h3>
+                    <span id="outputCounter" name="outputCounter">0 chars</span>
+                    <textarea id="output" name="output"></textarea>
+                </div>
+            </div>
+        </main>
+        <footer>
+            <div class="container">
+                <a href="http://www.persado.com"><img
+                        src="https://www.persado.com/system/assets/uploads/2019/01/persado-logo-tagline.svg"
+                        class="persadoLogo" alt="Persado logo"></a>
+                <p>&copy; 2020</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        document.getElementById('input').addEventListener('keydown', encodeOnEnter, false);
+        document.getElementById('encodeButton').addEventListener('click', encodeText, false);
+        document.getElementById('clearButton').addEventListener('click', clearTexts, false);
+    </script>
 </body>
 
 </html>
