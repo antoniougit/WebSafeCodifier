@@ -17,68 +17,7 @@
   </head>
 
   <body>
-    <div id="container">
-      <header>
-        <h1>WebSafe Codifier</h1>
-        <h2>
-          <span style="color: red">[ </span>George Antoniou - EMEA SDE team<span
-            style="color: red"
-            >]</span
-          >
-        </h2>
-      </header>
-      <main>
-        <div class="content">
-          <div id="inputBox">
-            <h3>Input:</h3>
-            <span id="inputCounter" name="inputCounter">0 chars</span>
-            <textarea id="input" name="input" rows="10"></textarea>
-          </div>
-          <div id="options">
-            <div class="checks">
-              <input type="checkbox" id="web" class="checkbox-input" />
-              <label for="web" class="checkbox-label" style="color: red"
-                >Encode or decode config for Web Standalone (overrides ALL other
-                options)</label
-              >
-            </div>
-            <div class="checks">
-              <input type="checkbox" id="xml" class="checkbox-input" />
-              <label for="xml" class="checkbox-label"
-                >Replace &lt; &gt; &quot; &amp; &apos; with named
-                entities</label
-              >
-            </div>
-            <div class="checks">
-              <input type="checkbox" id="nbsp" class="checkbox-input" />
-              <label for="nbsp" class="checkbox-label"
-                >Replace spaces with &amp;nbsp;</label
-              >
-            </div>
-            <div class="checks">
-              <input type="checkbox" id="br" class="checkbox-input" />
-              <label for="br" class="checkbox-label"
-                >Replace newlines with &lt;br /&gt;</label
-              >
-            </div>
-            <div class="checks">
-              <input type="checkbox" id="all" class="checkbox-input" />
-              <label for="all" class="checkbox-label" style="color: blue"
-                >Encode ALL except standard chars (overrides 3 above
-                options)</label
-              >
-            </div>
-          </div>
-        </div>
-        <div class="content">
-          <div id="outputBox">
-            <h3>Output:</h3>
-            <span id="outputCounter" name="outputCounter">0 chars</span>
-            <textarea id="output" name="output" rows="10"></textarea>
-          </div>
-        </div>
-      </main>
-    </div>
+    <div id="container"> <header> <h1>WebSafe Codifier</h1> <h2> <span style="color: red">[ </span>George Antoniou - EMEA SDE team<span style="color: red" >]</span > </h2> </header> <main> <div class="content"> <div id="inputBox"> <h3>Input:</h3> <span id="inputCounter" name="inputCounter">0 chars</span> <textarea id="input" name="input" rows="10"></textarea> </div><div id="options"> <div class="checks"> <input type="checkbox" id="web" class="checkbox-input"/> <label for="web" class="checkbox-label" style="color: red" >Encode or decode config for Web Standalone (overrides ALL other options)</label > </div><div class="checks"> <input type="checkbox" id="xml" class="checkbox-input"/> <label for="xml" class="checkbox-label" >Replace &lt; &gt; &quot; &amp; &apos; with named entities</label > </div><div class="checks"> <input type="checkbox" id="nbsp" class="checkbox-input"/> <label for="nbsp" class="checkbox-label" >Replace spaces with &amp;nbsp;</label > </div><div class="checks"> <input type="checkbox" id="br" class="checkbox-input"/> <label for="br" class="checkbox-label" >Replace newlines with &lt;br /&gt;</label > </div><div class="checks"> <input type="checkbox" id="all" class="checkbox-input"/> <label for="all" class="checkbox-label" style="color: blue" >Encode ALL except standard chars (overrides 3 above options)</label > </div></div></div><div class="content"> <div id="outputBox"> <h3>Output:</h3> <span id="outputCounter" name="outputCounter">0 chars</span> <textarea id="output" name="output" rows="10"></textarea> </div></div></main> </div>
   <script src="script.js"></script>
   </body>
 </html>
